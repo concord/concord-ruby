@@ -9,8 +9,9 @@ Gem::Specification.new do |s|
 
   s.require_paths = ['./lib', './lib/gen-rb']
   s.files         = ['lib/concord.rb'] + Dir['lib/gen-rb/*.rb'] + Dir['lib/concord/*.rb']
-  s.homepage      = 'http://concord.io'
+  s.homepage      = 'https://github.com/concord/concord-ruby'
   s.license       = 'MIT'
+  s.has_rdoc      = 'yard'
 
   # dependencies
   s.add_runtime_dependency 'thrift', '~> 0.9.2.0'
