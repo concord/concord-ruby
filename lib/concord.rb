@@ -119,7 +119,9 @@ module Concord
     # @param record [Concord::Thrift::Record] The record to process
     def boltProcessRecord(record)
       ctx = ComputationContext.new(self)
-      handler.process_record(ctx, record)
+      log_failure do
+        handler.process_record(ctx, record)
+      end
       ctx.transaction
     end
 
@@ -129,7 +131,9 @@ module Concord
     # @param time [FixNum] Time this callback was scheduled to trigger.
     def boltProcessTimer(key, time)
       ctx = ComputationContext.new(self)
-      handler.process_timer(ctx, key, time)
+      log_failure do
+        handler.process_timer(ctx, key, time)
+      end
       ctx.transaction
     end
 
@@ -138,13 +142,17 @@ module Concord
     # which is returned to the proxy upon completion.
     def init
       ctx = ComputationContext.new(self)
-      handler.init(ctx)
+      log_failure do
+        handler.init(ctx)
+      end
       ctx.transaction
     end
 
     # @return [Concord::Thrift::ComputationMetadata] The user-defined computation metadata.
     def boltMetadata
-      metadata = handler.metadata
+      log_failure do
+        metadata = handler.metadata
+      end
       enrich_metadata(metadata)
     end
 
@@ -163,6 +171,21 @@ module Concord
     end
 
     private
+
+    def log(msg, handle: $stderr)
+      handle.puts msg
+      handle.flush
+    end
+
+    def log_failure(&block)
+      begin
+        block.call
+      rescue => e
+        log e.message
+        log e.backtrace.join("\n")
+        raise e
+      end
+    end
 
     def proxy
       if @proxy.nil? || !@proxy_socket.open?
