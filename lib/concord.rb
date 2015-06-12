@@ -150,6 +150,7 @@ module Concord
 
     # @return [Concord::Thrift::ComputationMetadata] The user-defined computation metadata.
     def boltMetadata
+      metadata = nil
       log_failure do
         metadata = handler.metadata
       end
