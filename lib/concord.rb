@@ -206,10 +206,12 @@ module Concord
         grouping = nil
         if stream.is_a?(Array)
           name, grouping = stream
+        else
+          name = stream
         end
         sm = ::Concord::Thrift::StreamMetadata.new
         sm.name = name
-        sm.grouping unless grouping.nil?
+        sm.grouping = grouping unless grouping.nil?
         sm
       }
       cm = ::Concord::Thrift::ComputationMetadata.new
