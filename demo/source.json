@@ -1,0 +1,9 @@
+{
+  "cpus": 0.1,
+  "zookeeper_hosts":"127.0.0.1:2181",
+  "zookeeper_path":"/bolt",
+  "executable_name": "run.sh",
+  "compress_files": ["source.rb", "run.sh"],
+  "computation_name": "test-src",
+  "docker_container": "concord/client_devbox"
+}

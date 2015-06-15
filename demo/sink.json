@@ -1,0 +1,10 @@
+{
+  "cpus": 0.1,
+  "zookeeper_hosts":"127.0.0.1:2181",
+  "zookeeper_path":"/bolt",
+  "executable_name": "run_sink.sh",
+  "compress_files": ["sink.rb", "run_sink.sh"],
+  "computation_name": "test-sink",
+  "docker_container": "concord/client_devbox"
+}
+
