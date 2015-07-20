@@ -29,7 +29,11 @@ module Concord
 
     KDefaultTraceSampleEveryN = 1024
 
+    KPrincipalComputationName = %q"principal_computation"
+
     KIncomingMessageQueueTopic = %q"incoming"
+
+    KPrincipalTimerQueueTopic = %q"principal_timers"
 
     KOutgoingMessageQueueTopic = %q"outgoing"
 
