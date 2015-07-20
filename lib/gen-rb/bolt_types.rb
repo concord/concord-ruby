@@ -190,7 +190,7 @@ module Concord
       FIELDS = {
         TASKID => {:type => ::Thrift::Types::STRING, :name => 'taskId'},
         SLAVEID => {:type => ::Thrift::Types::STRING, :name => 'slaveId'},
-        CPUS => {:type => ::Thrift::Types::I32, :name => 'cpus'},
+        CPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'cpus'},
         MEM => {:type => ::Thrift::Types::I32, :name => 'mem'},
         DISK => {:type => ::Thrift::Types::I32, :name => 'disk'},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
@@ -367,7 +367,7 @@ module Concord
       FIELDS = {
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         INSTANCES => {:type => ::Thrift::Types::I64, :name => 'instances', :default => 1},
-        CPUS => {:type => ::Thrift::Types::I64, :name => 'cpus', :default => 1},
+        CPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'cpus', :default => 0.1},
         MEM => {:type => ::Thrift::Types::I64, :name => 'mem', :default => 2048},
         DISK => {:type => ::Thrift::Types::I64, :name => 'disk', :default => 10240},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
