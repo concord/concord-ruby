@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'concord-ruby'
-  s.version       = '0.0.8'
+  s.version       = '0.1.0'
   s.date          = '2015-06-20'
   s.summary       = "concord computation interface for ruby"
   s.description   = "concord computation interface for ruby"
@@ -14,6 +14,6 @@ Gem::Specification.new do |s|
   s.has_rdoc      = 'yard'
 
   # dependencies
-  s.add_runtime_dependency 'thrift', '~> 0.9.2.0'
+  s.add_runtime_dependency 'thrift', '0.9.2.0'
   s.add_development_dependency 'yard'
 end
