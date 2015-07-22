@@ -55,7 +55,8 @@ module Concord
     # Set a timer to trigger a callback in the future
     # @param key [String] Name of the timer. This parameter will be passed to
     # the `process_timer` callback to identify the specific callback.
-    # @param time [FixNum] Integer representing the time (in milliseconds) at which the callback should be triggered.
+    # @param time [FixNum] Integer representing the time (in milliseconds) at
+    #        which the callback should be triggered.
     def set_timer(key, time)
       transaction.timers[key] = time
     end
@@ -87,7 +88,12 @@ module Concord
       self.handler = handler
       self.proxy_host = proxy_host
       self.proxy_port = proxy_port
-      proxy.registerWithScheduler(boltMetadata)
+    end
+
+    def register_with_scheduler
+      log_failure do
+        proxy.registerWithScheduler(boltMetadata)
+      end
     end
 
     # Initialize a new `Computation` and start serving it. This is the only
@@ -111,7 +117,11 @@ module Concord
                                             transport,
                                             transport_factory,
                                             protocol_factory)
-      server.serve
+      t = Thread.new{
+        server.serve
+      }
+      handler.register_with_scheduler
+      t.join
     end
 
     # Process an upstream record. Wraps the user method in a transaction, which
