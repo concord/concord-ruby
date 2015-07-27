@@ -117,11 +117,10 @@ module Concord
                                             transport,
                                             transport_factory,
                                             protocol_factory)
-      t = Thread.new{
-        server.serve
-      }
+      # Register with localhost proxy. Note that this method is `oneway'
+      # which means after final TCP 'ack' it finishes.
       handler.register_with_scheduler
-      t.join
+      server.serve
     end
 
     # Process an upstream record. Wraps the user method in a transaction, which
