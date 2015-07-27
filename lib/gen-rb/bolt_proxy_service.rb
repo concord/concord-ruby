@@ -61,21 +61,6 @@ module Concord
           return
         end
 
-        def registerWithScheduler(meta)
-          send_registerWithScheduler(meta)
-          recv_registerWithScheduler()
-        end
-
-        def send_registerWithScheduler(meta)
-          send_message('registerWithScheduler', RegisterWithScheduler_args, :meta => meta)
-        end
-
-        def recv_registerWithScheduler()
-          result = receive_message(RegisterWithScheduler_result)
-          raise result.e unless result.e.nil?
-          return
-        end
-
         def updateSchedulerAddress(e)
           send_updateSchedulerAddress(e)
           recv_updateSchedulerAddress()
@@ -91,6 +76,13 @@ module Concord
           return
         end
 
+        def registerWithScheduler(meta)
+          send_registerWithScheduler(meta)
+        end
+
+        def send_registerWithScheduler(meta)
+          send_oneway_message('registerWithScheduler', RegisterWithScheduler_args, :meta => meta)
+        end
       end
 
       class Processor < ::Concord::Thrift::MutableEphemeralStateService::Processor 
@@ -129,17 +121,6 @@ module Concord
           write_result(result, oprot, 'dispatchRecords', seqid)
         end
 
-        def process_registerWithScheduler(seqid, iprot, oprot)
-          args = read_args(iprot, RegisterWithScheduler_args)
-          result = RegisterWithScheduler_result.new()
-          begin
-            @handler.registerWithScheduler(args.meta)
-          rescue ::Concord::Thrift::BoltError => e
-            result.e = e
-          end
-          write_result(result, oprot, 'registerWithScheduler', seqid)
-        end
-
         def process_updateSchedulerAddress(seqid, iprot, oprot)
           args = read_args(iprot, UpdateSchedulerAddress_args)
           result = UpdateSchedulerAddress_result.new()
@@ -149,6 +130,12 @@ module Concord
             result.e = e
           end
           write_result(result, oprot, 'updateSchedulerAddress', seqid)
+        end
+
+        def process_registerWithScheduler(seqid, iprot, oprot)
+          args = read_args(iprot, RegisterWithScheduler_args)
+          @handler.registerWithScheduler(args.meta)
+          return
         end
 
       end
@@ -255,38 +242,6 @@ module Concord
         ::Thrift::Struct.generate_accessors self
       end
 
-      class RegisterWithScheduler_args
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        META = 1
-
-        FIELDS = {
-          META => {:type => ::Thrift::Types::STRUCT, :name => 'meta', :class => ::Concord::Thrift::ComputationMetadata}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
-      class RegisterWithScheduler_result
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        E = 1
-
-        FIELDS = {
-          E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
       class UpdateSchedulerAddress_args
         include ::Thrift::Struct, ::Thrift::Struct_Union
         E = 1
@@ -309,6 +264,37 @@ module Concord
 
         FIELDS = {
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
+        }
+
+        def struct_fields; FIELDS; end
+
+        def validate
+        end
+
+        ::Thrift::Struct.generate_accessors self
+      end
+
+      class RegisterWithScheduler_args
+        include ::Thrift::Struct, ::Thrift::Struct_Union
+        META = 1
+
+        FIELDS = {
+          META => {:type => ::Thrift::Types::STRUCT, :name => 'meta', :class => ::Concord::Thrift::ComputationMetadata}
+        }
+
+        def struct_fields; FIELDS; end
+
+        def validate
+        end
+
+        ::Thrift::Struct.generate_accessors self
+      end
+
+      class RegisterWithScheduler_result
+        include ::Thrift::Struct, ::Thrift::Struct_Union
+
+        FIELDS = {
+
         }
 
         def struct_fields; FIELDS; end
