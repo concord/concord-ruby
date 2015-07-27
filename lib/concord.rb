@@ -210,23 +210,21 @@ module Concord
     end
 
     def enrich_metadata(metadata)
-      enrich_stream = ->(stream) {
-        name = nil
-        grouping = nil
-        if stream.is_a?(Array)
-          name, grouping = stream
-        else
-          name = stream
-        end
+      def enrich_stream(stream)
         sm = ::Concord::Thrift::StreamMetadata.new
-        sm.name = name
-        sm.grouping = grouping unless grouping.nil?
+        if stream.is_a?(Array)
+          sm.name = stream.first
+          sm.grouping = stream.last
+        else
+          sm.name = stream
+        end
         sm
-      }
+      end
+
       cm = ::Concord::Thrift::ComputationMetadata.new
       cm.name = metadata.name
-      cm.istreams = metadata.istreams.map { |x| enrich_stream.call(x) }
-      cm.ostreams = metadata.ostreams.map { |x| enrich_stream.call(x) }
+      cm.istreams = metadata.istreams.map { |x| enrich_stream(x) }
+      cm.ostreams = metadata.ostreams.map { |x| enrich_stream(x) }
       cm.proxyEndpoint = ::Concord::Thrift::Endpoint.new
       cm.proxyEndpoint.ip = proxy_host
       cm.proxyEndpoint.port = proxy_port
