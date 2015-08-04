@@ -113,10 +113,15 @@ module Concord
       transport = ::Thrift::ServerSocket.new(listen_host, Integer(listen_port))
       transport_factory = ::Thrift::FramedTransportFactory.new
       protocol_factory = ::Thrift::BinaryProtocolAcceleratedFactory.new
-      server = ::Thrift::ThreadedServer.new(processor,
-                                            transport,
-                                            transport_factory,
-                                            protocol_factory)
+      # The reason the client computations MUST use a simple blocking server
+      # is that we have process_timer and process_record both which exec as
+      # a callback in the work thread pool which means that you might get
+      # 2 callbacks whichs makes the code multi threaded - we guarantee single
+      # thread for each callback
+      server = ::Thrift::SimpleServer.new(processor,
+                                          transport,
+                                          transport_factory,
+                                          protocol_factory)
       # Register with localhost proxy. Note that this method is `oneway'
       # which means after final TCP 'ack' it finishes.
       handler.register_with_scheduler
