@@ -119,9 +119,9 @@ module Concord
       # 2 callbacks whichs makes the code multi threaded - we guarantee single
       # thread for each callback
       server = ::Thrift::SimpleServer.new(processor,
-                                            transport,
-                                            transport_factory,
-                                            protocol_factory)
+                                          transport,
+                                          transport_factory,
+                                          protocol_factory)
       # Register with localhost proxy. Note that this method is `oneway'
       # which means after final TCP 'ack' it finishes.
       handler.register_with_scheduler
