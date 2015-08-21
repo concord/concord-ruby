@@ -248,13 +248,13 @@ module Concord
     class TopologyMetadata
       include ::Thrift::Struct, ::Thrift::Struct_Union
       VERSION = 1
-      HASH = 2
-      COMPUTATIONS = 3
+      COMPUTATIONS = 2
+      FRAMEWORKID = 3
 
       FIELDS = {
         VERSION => {:type => ::Thrift::Types::I32, :name => 'version', :default => 0},
-        HASH => {:type => ::Thrift::Types::STRING, :name => 'hash'},
-        COMPUTATIONS => {:type => ::Thrift::Types::MAP, :name => 'computations', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::PhysicalComputationLayout}}
+        COMPUTATIONS => {:type => ::Thrift::Types::MAP, :name => 'computations', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::PhysicalComputationLayout}},
+        FRAMEWORKID => {:type => ::Thrift::Types::STRING, :name => 'frameworkID'}
       }
 
       def struct_fields; FIELDS; end
