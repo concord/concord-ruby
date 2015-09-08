@@ -125,7 +125,7 @@ module Concord
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         TASKID => {:type => ::Thrift::Types::STRING, :name => 'taskId'},
         ISTREAMS => {:type => ::Thrift::Types::LIST, :name => 'istreams', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::StreamMetadata}},
-        OSTREAMS => {:type => ::Thrift::Types::LIST, :name => 'ostreams', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::StreamMetadata}},
+        OSTREAMS => {:type => ::Thrift::Types::LIST, :name => 'ostreams', :element => {:type => ::Thrift::Types::STRING}},
         PROXYENDPOINT => {:type => ::Thrift::Types::STRUCT, :name => 'proxyEndpoint', :class => ::Concord::Thrift::Endpoint}
       }
 
@@ -177,7 +177,7 @@ module Concord
       ::Thrift::Struct.generate_accessors self
     end
 
-    class PhysicalComputationMetdata
+    class PhysicalComputationMetadata
       include ::Thrift::Struct, ::Thrift::Struct_Union
       TASKID = 1
       SLAVEID = 2
@@ -215,8 +215,8 @@ module Concord
       FIELDS = {
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         ISTREAMS => {:type => ::Thrift::Types::LIST, :name => 'istreams', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::StreamMetadata}},
-        OSTREAMS => {:type => ::Thrift::Types::LIST, :name => 'ostreams', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::StreamMetadata}},
-        NODES => {:type => ::Thrift::Types::LIST, :name => 'nodes', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::PhysicalComputationMetdata}}
+        OSTREAMS => {:type => ::Thrift::Types::LIST, :name => 'ostreams', :element => {:type => ::Thrift::Types::STRING}},
+        NODES => {:type => ::Thrift::Types::LIST, :name => 'nodes', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::PhysicalComputationMetadata}}
       }
 
       def struct_fields; FIELDS; end

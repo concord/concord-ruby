@@ -229,7 +229,7 @@ module Concord
       cm = ::Concord::Thrift::ComputationMetadata.new
       cm.name = metadata.name
       cm.istreams = metadata.istreams.map { |x| enrich_stream(x) }
-      cm.ostreams = metadata.ostreams.map { |x| enrich_stream(x) }
+      cm.ostreams = metadata.ostreams
       cm.proxyEndpoint = ::Concord::Thrift::Endpoint.new
       cm.proxyEndpoint.ip = proxy_host
       cm.proxyEndpoint.port = proxy_port
