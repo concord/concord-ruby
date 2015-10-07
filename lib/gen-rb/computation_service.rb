@@ -29,20 +29,20 @@ module Concord
           raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'init failed: unknown result')
         end
 
-        def boltProcessRecord(record)
-          send_boltProcessRecord(record)
-          return recv_boltProcessRecord()
+        def boltProcessRecords(records)
+          send_boltProcessRecords(records)
+          return recv_boltProcessRecords()
         end
 
-        def send_boltProcessRecord(record)
-          send_message('boltProcessRecord', BoltProcessRecord_args, :record => record)
+        def send_boltProcessRecords(records)
+          send_message('boltProcessRecords', BoltProcessRecords_args, :records => records)
         end
 
-        def recv_boltProcessRecord()
-          result = receive_message(BoltProcessRecord_result)
+        def recv_boltProcessRecords()
+          result = receive_message(BoltProcessRecords_result)
           return result.success unless result.success.nil?
           raise result.e unless result.e.nil?
-          raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'boltProcessRecord failed: unknown result')
+          raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'boltProcessRecords failed: unknown result')
         end
 
         def boltProcessTimer(key, time)
@@ -93,15 +93,15 @@ module Concord
           write_result(result, oprot, 'init', seqid)
         end
 
-        def process_boltProcessRecord(seqid, iprot, oprot)
-          args = read_args(iprot, BoltProcessRecord_args)
-          result = BoltProcessRecord_result.new()
+        def process_boltProcessRecords(seqid, iprot, oprot)
+          args = read_args(iprot, BoltProcessRecords_args)
+          result = BoltProcessRecords_result.new()
           begin
-            result.success = @handler.boltProcessRecord(args.record)
+            result.success = @handler.boltProcessRecords(args.records)
           rescue ::Concord::Thrift::BoltError => e
             result.e = e
           end
-          write_result(result, oprot, 'boltProcessRecord', seqid)
+          write_result(result, oprot, 'boltProcessRecords', seqid)
         end
 
         def process_boltProcessTimer(seqid, iprot, oprot)
@@ -163,12 +163,12 @@ module Concord
         ::Thrift::Struct.generate_accessors self
       end
 
-      class BoltProcessRecord_args
+      class BoltProcessRecords_args
         include ::Thrift::Struct, ::Thrift::Struct_Union
-        RECORD = 1
+        RECORDS = 1
 
         FIELDS = {
-          RECORD => {:type => ::Thrift::Types::STRUCT, :name => 'record', :class => ::Concord::Thrift::Record}
+          RECORDS => {:type => ::Thrift::Types::LIST, :name => 'records', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::Record}}
         }
 
         def struct_fields; FIELDS; end
@@ -179,13 +179,13 @@ module Concord
         ::Thrift::Struct.generate_accessors self
       end
 
-      class BoltProcessRecord_result
+      class BoltProcessRecords_result
         include ::Thrift::Struct, ::Thrift::Struct_Union
         SUCCESS = 0
         E = 1
 
         FIELDS = {
-          SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Concord::Thrift::ComputationTx},
+          SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::ComputationTx}},
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
         }
 

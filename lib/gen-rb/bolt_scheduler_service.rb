@@ -46,7 +46,7 @@ module Concord
 
         def registerComputation(computation)
           send_registerComputation(computation)
-          recv_registerComputation()
+          return recv_registerComputation()
         end
 
         def send_registerComputation(computation)
@@ -55,8 +55,9 @@ module Concord
 
         def recv_registerComputation()
           result = receive_message(RegisterComputation_result)
+          return result.success unless result.success.nil?
           raise result.e unless result.e.nil?
-          return
+          raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'registerComputation failed: unknown result')
         end
 
         def scaleComputation(computationName, instances)
@@ -120,7 +121,7 @@ module Concord
           args = read_args(iprot, RegisterComputation_args)
           result = RegisterComputation_result.new()
           begin
-            @handler.registerComputation(args.computation)
+            result.success = @handler.registerComputation(args.computation)
           rescue ::Concord::Thrift::BoltError => e
             result.e = e
           end
@@ -237,9 +238,11 @@ module Concord
 
       class RegisterComputation_result
         include ::Thrift::Struct, ::Thrift::Struct_Union
+        SUCCESS = 0
         E = 1
 
         FIELDS = {
+          SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Concord::Thrift::TopologyMetadata},
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
         }
 

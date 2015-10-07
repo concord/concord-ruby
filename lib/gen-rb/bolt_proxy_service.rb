@@ -14,36 +14,19 @@ module Concord
       class Client < ::Concord::Thrift::MutableEphemeralStateService::Client 
         include ::Thrift::Client
 
-        def registerRichStream(r)
-          send_registerRichStream(r)
-          return recv_registerRichStream()
+        def updateTopology(topology)
+          send_updateTopology(topology)
+          recv_updateTopology()
         end
 
-        def send_registerRichStream(r)
-          send_message('registerRichStream', RegisterRichStream_args, :r => r)
+        def send_updateTopology(topology)
+          send_message('updateTopology', UpdateTopology_args, :topology => topology)
         end
 
-        def recv_registerRichStream()
-          result = receive_message(RegisterRichStream_result)
-          return result.success unless result.success.nil?
+        def recv_updateTopology()
+          result = receive_message(UpdateTopology_result)
           raise result.e unless result.e.nil?
-          raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'registerRichStream failed: unknown result')
-        end
-
-        def deregisterRichStream(r)
-          send_deregisterRichStream(r)
-          return recv_deregisterRichStream()
-        end
-
-        def send_deregisterRichStream(r)
-          send_message('deregisterRichStream', DeregisterRichStream_args, :r => r)
-        end
-
-        def recv_deregisterRichStream()
-          result = receive_message(DeregisterRichStream_result)
-          return result.success unless result.success.nil?
-          raise result.e unless result.e.nil?
-          raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'deregisterRichStream failed: unknown result')
+          return
         end
 
         def dispatchRecords(records)
@@ -88,26 +71,15 @@ module Concord
       class Processor < ::Concord::Thrift::MutableEphemeralStateService::Processor 
         include ::Thrift::Processor
 
-        def process_registerRichStream(seqid, iprot, oprot)
-          args = read_args(iprot, RegisterRichStream_args)
-          result = RegisterRichStream_result.new()
+        def process_updateTopology(seqid, iprot, oprot)
+          args = read_args(iprot, UpdateTopology_args)
+          result = UpdateTopology_result.new()
           begin
-            result.success = @handler.registerRichStream(args.r)
+            @handler.updateTopology(args.topology)
           rescue ::Concord::Thrift::BoltError => e
             result.e = e
           end
-          write_result(result, oprot, 'registerRichStream', seqid)
-        end
-
-        def process_deregisterRichStream(seqid, iprot, oprot)
-          args = read_args(iprot, DeregisterRichStream_args)
-          result = DeregisterRichStream_result.new()
-          begin
-            result.success = @handler.deregisterRichStream(args.r)
-          rescue ::Concord::Thrift::BoltError => e
-            result.e = e
-          end
-          write_result(result, oprot, 'deregisterRichStream', seqid)
+          write_result(result, oprot, 'updateTopology', seqid)
         end
 
         def process_dispatchRecords(seqid, iprot, oprot)
@@ -142,12 +114,12 @@ module Concord
 
       # HELPER FUNCTIONS AND STRUCTURES
 
-      class RegisterRichStream_args
+      class UpdateTopology_args
         include ::Thrift::Struct, ::Thrift::Struct_Union
-        R = 1
+        TOPOLOGY = 1
 
         FIELDS = {
-          R => {:type => ::Thrift::Types::STRUCT, :name => 'r', :class => ::Concord::Thrift::RichStream}
+          TOPOLOGY => {:type => ::Thrift::Types::STRUCT, :name => 'topology', :class => ::Concord::Thrift::TopologyMetadata}
         }
 
         def struct_fields; FIELDS; end
@@ -158,47 +130,11 @@ module Concord
         ::Thrift::Struct.generate_accessors self
       end
 
-      class RegisterRichStream_result
+      class UpdateTopology_result
         include ::Thrift::Struct, ::Thrift::Struct_Union
-        SUCCESS = 0
         E = 1
 
         FIELDS = {
-          SUCCESS => {:type => ::Thrift::Types::BOOL, :name => 'success'},
-          E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
-      class DeregisterRichStream_args
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        R = 1
-
-        FIELDS = {
-          R => {:type => ::Thrift::Types::STRUCT, :name => 'r', :class => ::Concord::Thrift::RichStream}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
-      class DeregisterRichStream_result
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        SUCCESS = 0
-        E = 1
-
-        FIELDS = {
-          SUCCESS => {:type => ::Thrift::Types::BOOL, :name => 'success'},
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
         }
 
