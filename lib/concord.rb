@@ -128,15 +128,19 @@ module Concord
       server.serve
     end
 
-    # Process an upstream record. Wraps the user method in a transaction, which
-    # is returned to the proxy upon completion.
-    # @param record [Concord::Thrift::Record] The record to process
-    def boltProcessRecord(record)
-      ctx = ComputationContext.new(self)
-      log_failure do
-        handler.process_record(ctx, record)
+    # Process records from upstream. Wraps the user method in transactions,
+    # which are returned to the proxy upon completion.
+    # @param records [Concord::Thrift::Record] The record to process
+    def boltProcessRecords(records)
+      txs = []
+      records.each do |record|
+        ctx = ComputationContext.new(self)
+        log_failure do
+          handler.process_record(ctx, record)
+        end
+        txs.push(ctx.transaction)
       end
-      ctx.transaction
+      txs
     end
 
     # Process a timer callback from the proxy. Wraps the user method in a
