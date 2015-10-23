@@ -45,7 +45,5 @@ module Concord
 
     KMessageQueueTTL = 21600
 
-    KBoltTraceHeader = %q"bolt_traces"
-
   end
 end

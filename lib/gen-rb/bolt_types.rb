@@ -45,15 +45,6 @@ module Concord
       VALID_VALUES = Set.new([CLIENT_RECORD, FRAMEWORK_RECORD]).freeze
     end
 
-    module AnnotationType
-      CLIENT_SEND = 0
-      CLIENT_RECV = 1
-      SERVER_SEND = 2
-      SERVER_RECV = 3
-      VALUE_MAP = {0 => "CLIENT_SEND", 1 => "CLIENT_RECV", 2 => "SERVER_SEND", 3 => "SERVER_RECV"}
-      VALID_VALUES = Set.new([CLIENT_SEND, CLIENT_RECV, SERVER_SEND, SERVER_RECV]).freeze
-    end
-
     class BoltError < ::Thrift::Exception
       include ::Thrift::Struct, ::Thrift::Struct_Union
       REASON = 1
@@ -81,7 +72,7 @@ module Concord
 
       FIELDS = {
         IP => {:type => ::Thrift::Types::STRING, :name => 'ip'},
-        PORT => {:type => ::Thrift::Types::I16, :name => 'port'}
+        PORT => {:type => ::Thrift::Types::I32, :name => 'port'}
       }
 
       def struct_fields; FIELDS; end
@@ -373,75 +364,6 @@ module Concord
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
         FORCEUPDATEBINARY => {:type => ::Thrift::Types::BOOL, :name => 'forceUpdateBinary'},
         SLUG => {:type => ::Thrift::Types::STRING, :name => 'slug', :binary => true}
-      }
-
-      def struct_fields; FIELDS; end
-
-      def validate
-      end
-
-      ::Thrift::Struct.generate_accessors self
-    end
-
-    class Annotation
-      include ::Thrift::Struct, ::Thrift::Struct_Union
-      TIMESTAMP = 1
-      TYPE = 2
-      KEY = 3
-      VALUE = 4
-      HOST = 5
-
-      FIELDS = {
-        TIMESTAMP => {:type => ::Thrift::Types::I64, :name => 'timestamp'},
-        TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::Concord::Thrift::AnnotationType},
-        KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-        VALUE => {:type => ::Thrift::Types::STRING, :name => 'value', :binary => true},
-        HOST => {:type => ::Thrift::Types::STRUCT, :name => 'host', :class => ::Concord::Thrift::Endpoint}
-      }
-
-      def struct_fields; FIELDS; end
-
-      def validate
-        unless @type.nil? || ::Concord::Thrift::AnnotationType::VALID_VALUES.include?(@type)
-          raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field type!')
-        end
-      end
-
-      ::Thrift::Struct.generate_accessors self
-    end
-
-    class Span
-      include ::Thrift::Struct, ::Thrift::Struct_Union
-      TRACEID = 1
-      ID = 2
-      PARENTID = 3
-      NAME = 4
-      ANNOTATIONS = 5
-
-      FIELDS = {
-        TRACEID => {:type => ::Thrift::Types::I64, :name => 'traceId'},
-        ID => {:type => ::Thrift::Types::I64, :name => 'id'},
-        PARENTID => {:type => ::Thrift::Types::I64, :name => 'parentId'},
-        NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
-        ANNOTATIONS => {:type => ::Thrift::Types::LIST, :name => 'annotations', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::Annotation}}
-      }
-
-      def struct_fields; FIELDS; end
-
-      def validate
-      end
-
-      ::Thrift::Struct.generate_accessors self
-    end
-
-    class Trace
-      include ::Thrift::Struct, ::Thrift::Struct_Union
-      ID = 1
-      SPANS = 2
-
-      FIELDS = {
-        ID => {:type => ::Thrift::Types::I64, :name => 'id'},
-        SPANS => {:type => ::Thrift::Types::LIST, :name => 'spans', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::Span}}
       }
 
       def struct_fields; FIELDS; end
