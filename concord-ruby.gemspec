@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name          = 'concord-ruby'
   s.version       = '0.3.3'
-  s.date          = '2015-10-07'
+  s.date          = '2015-11-16'
   s.summary       = "concord computation interface for ruby"
   s.description   = "ruby client library for concord operators"
-  s.authors       = ["Cole Brown", "Alex Gallego"]
+  s.authors       = ["Cole Brown", "Alex Gallego", "Rob Blafford"]
   s.email         = 'hello@concord.io'
 
   s.require_paths = ['./lib', './lib/gen-rb']
