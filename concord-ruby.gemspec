@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'concord-ruby'
-  s.version       = '0.3.2'
+  s.version       = '0.3.3'
   s.date          = '2015-10-07'
   s.summary       = "concord computation interface for ruby"
   s.description   = "ruby client library for concord operators"
