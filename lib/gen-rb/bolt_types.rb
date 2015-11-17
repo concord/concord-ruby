@@ -136,13 +136,12 @@ module Concord
       SCHEDULER = 4
       PROXY = 5
       CLIENT = 6
-      TRACEAGGREGATOR = 7
-      EXECNAME = 8
-      FOLDER = 9
-      COMPUTATIONALIASNAME = 10
-      CLIENTARGUMENTS = 11
-      ENVIRONMENTEXTRA = 12
-      DOCKERCONTAINER = 13
+      EXECNAME = 7
+      FOLDER = 8
+      COMPUTATIONALIASNAME = 9
+      CLIENTARGUMENTS = 10
+      ENVIRONMENTEXTRA = 11
+      DOCKERCONTAINER = 12
 
       FIELDS = {
         FRAMEWORKLOGGINGLEVEL => {:type => ::Thrift::Types::I32, :name => 'frameworkLoggingLevel', :default => 1},
@@ -151,7 +150,6 @@ module Concord
         SCHEDULER => {:type => ::Thrift::Types::STRUCT, :name => 'scheduler', :class => ::Concord::Thrift::Endpoint},
         PROXY => {:type => ::Thrift::Types::STRUCT, :name => 'proxy', :class => ::Concord::Thrift::Endpoint},
         CLIENT => {:type => ::Thrift::Types::STRUCT, :name => 'client', :class => ::Concord::Thrift::Endpoint},
-        TRACEAGGREGATOR => {:type => ::Thrift::Types::STRUCT, :name => 'traceAggregator', :class => ::Concord::Thrift::Endpoint},
         EXECNAME => {:type => ::Thrift::Types::STRING, :name => 'execName'},
         FOLDER => {:type => ::Thrift::Types::STRING, :name => 'folder'},
         COMPUTATIONALIASNAME => {:type => ::Thrift::Types::STRING, :name => 'computationAliasName'},
@@ -241,11 +239,13 @@ module Concord
       VERSION = 1
       COMPUTATIONS = 2
       FRAMEWORKID = 3
+      KAFKABROKERLIST = 4
 
       FIELDS = {
         VERSION => {:type => ::Thrift::Types::I32, :name => 'version', :default => 0},
         COMPUTATIONS => {:type => ::Thrift::Types::MAP, :name => 'computations', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Concord::Thrift::PhysicalComputationLayout}},
-        FRAMEWORKID => {:type => ::Thrift::Types::STRING, :name => 'frameworkID'}
+        FRAMEWORKID => {:type => ::Thrift::Types::STRING, :name => 'frameworkID'},
+        KAFKABROKERLIST => {:type => ::Thrift::Types::STRING, :name => 'kafkaBrokerList'}
       }
 
       def struct_fields; FIELDS; end
