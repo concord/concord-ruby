@@ -136,12 +136,14 @@ module Concord
       SCHEDULER = 4
       PROXY = 5
       CLIENT = 6
+      ROUTER = 14
       EXECNAME = 7
       FOLDER = 8
       COMPUTATIONALIASNAME = 9
       CLIENTARGUMENTS = 10
       ENVIRONMENTEXTRA = 11
       DOCKERCONTAINER = 12
+      RETRIES = 13
 
       FIELDS = {
         FRAMEWORKLOGGINGLEVEL => {:type => ::Thrift::Types::I32, :name => 'frameworkLoggingLevel', :default => 1},
@@ -150,12 +152,14 @@ module Concord
         SCHEDULER => {:type => ::Thrift::Types::STRUCT, :name => 'scheduler', :class => ::Concord::Thrift::Endpoint},
         PROXY => {:type => ::Thrift::Types::STRUCT, :name => 'proxy', :class => ::Concord::Thrift::Endpoint},
         CLIENT => {:type => ::Thrift::Types::STRUCT, :name => 'client', :class => ::Concord::Thrift::Endpoint},
+        ROUTER => {:type => ::Thrift::Types::STRUCT, :name => 'router', :class => ::Concord::Thrift::Endpoint},
         EXECNAME => {:type => ::Thrift::Types::STRING, :name => 'execName'},
         FOLDER => {:type => ::Thrift::Types::STRING, :name => 'folder'},
         COMPUTATIONALIASNAME => {:type => ::Thrift::Types::STRING, :name => 'computationAliasName'},
         CLIENTARGUMENTS => {:type => ::Thrift::Types::LIST, :name => 'clientArguments', :element => {:type => ::Thrift::Types::STRING}},
         ENVIRONMENTEXTRA => {:type => ::Thrift::Types::LIST, :name => 'environmentExtra', :element => {:type => ::Thrift::Types::STRING}},
-        DOCKERCONTAINER => {:type => ::Thrift::Types::STRING, :name => 'dockerContainer'}
+        DOCKERCONTAINER => {:type => ::Thrift::Types::STRING, :name => 'dockerContainer'},
+        RETRIES => {:type => ::Thrift::Types::I32, :name => 'retries', :default => 0}
       }
 
       def struct_fields; FIELDS; end
@@ -175,6 +179,7 @@ module Concord
       DISK = 5
       TASKHELPER = 6
       NEEDSRECONCILIATION = 7
+      KILLED = 8
 
       FIELDS = {
         TASKID => {:type => ::Thrift::Types::STRING, :name => 'taskId'},
@@ -183,7 +188,8 @@ module Concord
         MEM => {:type => ::Thrift::Types::I32, :name => 'mem'},
         DISK => {:type => ::Thrift::Types::I32, :name => 'disk'},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
-        NEEDSRECONCILIATION => {:type => ::Thrift::Types::BOOL, :name => 'needsReconciliation'}
+        NEEDSRECONCILIATION => {:type => ::Thrift::Types::BOOL, :name => 'needsReconciliation'},
+        KILLED => {:type => ::Thrift::Types::BOOL, :name => 'killed'}
       }
 
       def struct_fields; FIELDS; end
@@ -354,6 +360,7 @@ module Concord
       TASKHELPER = 6
       FORCEUPDATEBINARY = 7
       SLUG = 8
+      FORCEPULLCONTAINER = 9
 
       FIELDS = {
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
@@ -363,7 +370,8 @@ module Concord
         DISK => {:type => ::Thrift::Types::I64, :name => 'disk', :default => 10240},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
         FORCEUPDATEBINARY => {:type => ::Thrift::Types::BOOL, :name => 'forceUpdateBinary'},
-        SLUG => {:type => ::Thrift::Types::STRING, :name => 'slug', :binary => true}
+        SLUG => {:type => ::Thrift::Types::STRING, :name => 'slug', :binary => true},
+        FORCEPULLCONTAINER => {:type => ::Thrift::Types::BOOL, :name => 'forcePullContainer', :default => true}
       }
 
       def struct_fields; FIELDS; end

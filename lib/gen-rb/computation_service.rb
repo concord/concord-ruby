@@ -29,6 +29,21 @@ module Concord
           raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'init failed: unknown result')
         end
 
+        def destroy()
+          send_destroy()
+          recv_destroy()
+        end
+
+        def send_destroy()
+          send_message('destroy', Destroy_args)
+        end
+
+        def recv_destroy()
+          result = receive_message(Destroy_result)
+          raise result.e unless result.e.nil?
+          return
+        end
+
         def boltProcessRecords(records)
           send_boltProcessRecords(records)
           return recv_boltProcessRecords()
@@ -93,6 +108,17 @@ module Concord
           write_result(result, oprot, 'init', seqid)
         end
 
+        def process_destroy(seqid, iprot, oprot)
+          args = read_args(iprot, Destroy_args)
+          result = Destroy_result.new()
+          begin
+            @handler.destroy()
+          rescue ::Concord::Thrift::BoltError => e
+            result.e = e
+          end
+          write_result(result, oprot, 'destroy', seqid)
+        end
+
         def process_boltProcessRecords(seqid, iprot, oprot)
           args = read_args(iprot, BoltProcessRecords_args)
           result = BoltProcessRecords_result.new()
@@ -152,6 +178,37 @@ module Concord
 
         FIELDS = {
           SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Concord::Thrift::ComputationTx},
+          E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
+        }
+
+        def struct_fields; FIELDS; end
+
+        def validate
+        end
+
+        ::Thrift::Struct.generate_accessors self
+      end
+
+      class Destroy_args
+        include ::Thrift::Struct, ::Thrift::Struct_Union
+
+        FIELDS = {
+
+        }
+
+        def struct_fields; FIELDS; end
+
+        def validate
+        end
+
+        ::Thrift::Struct.generate_accessors self
+      end
+
+      class Destroy_result
+        include ::Thrift::Struct, ::Thrift::Struct_Union
+        E = 1
+
+        FIELDS = {
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
         }
 

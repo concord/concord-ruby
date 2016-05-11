@@ -1,6 +1,18 @@
-# Concord Ruby Client API
-The Ruby API for the Concord distributed stream-processing framework. Find
-in-depth documentation and more at our [documentation
-website](http://docs.concord.io/ruby_client.html).
+# concord-rb
 
-### NOTE: This repository is officially frozen and has been merged into the main concord repo. Any further commits should be made there.
+**Ruby client libraries for Concord**
+
+## Building
+
+This repository is organized to work with the rubygems package manager.
+In order to create the package you will need the necessary generated code.
+Run the build_thrift script from the root of the concord project:
+```
+~/../concord/ $ ./configure.py --thrift
+```
+
+The generated code this package depends on is now located in ``lib/gen-rb``.
+To install the package and its dependencies use gem2.0:
+```
+gem2.0 install concord-ruby
+```

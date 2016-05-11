@@ -23,11 +23,13 @@ module Concord
 
     KDatabasePath = %q"/tmp"
 
-    KDatabaseEntryTTL = 43200
-
     KDefaultBatchSize = 2048
 
     KDefaultTraceSampleEveryN = 1024
+
+    KPrincipalMonitoringName = %q"principal"
+
+    KDispatcherMonitoringName = %q"dispatcher"
 
     KPrincipalComputationName = %q"principal_computation"
 

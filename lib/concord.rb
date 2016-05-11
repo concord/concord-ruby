@@ -166,6 +166,14 @@ module Concord
       ctx.transaction
     end
 
+    # The class destructor, use this method to perform any cleanup before the
+    # proxy kills the process this instance resides in.
+    def destroy
+      log_failure do
+        handler.destroy
+      end
+    end
+
     # @return [Concord::Thrift::ComputationMetadata] The user-defined computation metadata.
     def boltMetadata
       metadata = nil
