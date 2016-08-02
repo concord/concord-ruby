@@ -60,21 +60,6 @@ module Concord
           raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'registerComputation failed: unknown result')
         end
 
-        def scaleComputation(computationName, instances)
-          send_scaleComputation(computationName, instances)
-          recv_scaleComputation()
-        end
-
-        def send_scaleComputation(computationName, instances)
-          send_message('scaleComputation', ScaleComputation_args, :computationName => computationName, :instances => instances)
-        end
-
-        def recv_scaleComputation()
-          result = receive_message(ScaleComputation_result)
-          raise result.e unless result.e.nil?
-          return
-        end
-
         def killTask(taskId)
           send_killTask(taskId)
           recv_killTask()
@@ -126,17 +111,6 @@ module Concord
             result.e = e
           end
           write_result(result, oprot, 'registerComputation', seqid)
-        end
-
-        def process_scaleComputation(seqid, iprot, oprot)
-          args = read_args(iprot, ScaleComputation_args)
-          result = ScaleComputation_result.new()
-          begin
-            @handler.scaleComputation(args.computationName, args.instances)
-          rescue ::Concord::Thrift::BoltError => e
-            result.e = e
-          end
-          write_result(result, oprot, 'scaleComputation', seqid)
         end
 
         def process_killTask(seqid, iprot, oprot)
@@ -243,40 +217,6 @@ module Concord
 
         FIELDS = {
           SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Concord::Thrift::TopologyMetadata},
-          E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
-      class ScaleComputation_args
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        COMPUTATIONNAME = 1
-        INSTANCES = 2
-
-        FIELDS = {
-          COMPUTATIONNAME => {:type => ::Thrift::Types::STRING, :name => 'computationName'},
-          INSTANCES => {:type => ::Thrift::Types::I64, :name => 'instances'}
-        }
-
-        def struct_fields; FIELDS; end
-
-        def validate
-        end
-
-        ::Thrift::Struct.generate_accessors self
-      end
-
-      class ScaleComputation_result
-        include ::Thrift::Struct, ::Thrift::Struct_Union
-        E = 1
-
-        FIELDS = {
           E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::Concord::Thrift::BoltError}
         }
 

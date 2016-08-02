@@ -1,2 +1,5 @@
 doc/
 concord-ruby-*.gem
+
+# Generated code
+lib/gen-rb
