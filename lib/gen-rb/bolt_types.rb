@@ -180,16 +180,18 @@ module Concord
       TASKHELPER = 6
       NEEDSRECONCILIATION = 7
       KILLED = 8
+      GPUS = 9
 
       FIELDS = {
         TASKID => {:type => ::Thrift::Types::STRING, :name => 'taskId'},
         SLAVEID => {:type => ::Thrift::Types::STRING, :name => 'slaveId'},
         CPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'cpus'},
-        MEM => {:type => ::Thrift::Types::I32, :name => 'mem'},
-        DISK => {:type => ::Thrift::Types::I32, :name => 'disk'},
+        MEM => {:type => ::Thrift::Types::DOUBLE, :name => 'mem'},
+        DISK => {:type => ::Thrift::Types::DOUBLE, :name => 'disk'},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
         NEEDSRECONCILIATION => {:type => ::Thrift::Types::BOOL, :name => 'needsReconciliation'},
-        KILLED => {:type => ::Thrift::Types::BOOL, :name => 'killed'}
+        KILLED => {:type => ::Thrift::Types::BOOL, :name => 'killed'},
+        GPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'gpus'}
       }
 
       def struct_fields; FIELDS; end
@@ -362,18 +364,20 @@ module Concord
       SLUG = 8
       FORCEPULLCONTAINER = 9
       EXECUTORARGS = 10
+      GPUS = 11
 
       FIELDS = {
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         INSTANCES => {:type => ::Thrift::Types::I64, :name => 'instances', :default => 1},
         CPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'cpus', :default => 0.1},
-        MEM => {:type => ::Thrift::Types::I64, :name => 'mem', :default => 2048},
-        DISK => {:type => ::Thrift::Types::I64, :name => 'disk', :default => 10240},
+        MEM => {:type => ::Thrift::Types::DOUBLE, :name => 'mem', :default => 2048},
+        DISK => {:type => ::Thrift::Types::DOUBLE, :name => 'disk', :default => 10240},
         TASKHELPER => {:type => ::Thrift::Types::STRUCT, :name => 'taskHelper', :class => ::Concord::Thrift::ExecutorTaskInfoHelper},
         FORCEUPDATEBINARY => {:type => ::Thrift::Types::BOOL, :name => 'forceUpdateBinary'},
         SLUG => {:type => ::Thrift::Types::STRING, :name => 'slug', :binary => true},
         FORCEPULLCONTAINER => {:type => ::Thrift::Types::BOOL, :name => 'forcePullContainer', :default => true},
-        EXECUTORARGS => {:type => ::Thrift::Types::LIST, :name => 'executorArgs', :element => {:type => ::Thrift::Types::STRING}}
+        EXECUTORARGS => {:type => ::Thrift::Types::LIST, :name => 'executorArgs', :element => {:type => ::Thrift::Types::STRING}},
+        GPUS => {:type => ::Thrift::Types::DOUBLE, :name => 'gpus', :default => 0}
       }
 
       def struct_fields; FIELDS; end
